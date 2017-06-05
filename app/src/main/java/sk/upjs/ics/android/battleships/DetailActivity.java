@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView detailTime;
     private TextView detailDifficulty;
     private TextView detailShotsNumber;
+    private ImageView shipImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class DetailActivity extends AppCompatActivity {
         detailTime = (TextView) findViewById(R.id.detailTime);
         detailDifficulty = (TextView) findViewById(R.id.detailDifficulty);
         detailShotsNumber = (TextView) findViewById(R.id.detailShotsNumber);
+        shipImageView = (ImageView) findViewById(R.id.shipImageView);
 
         AsyncQueryHandler handler = new AsyncQueryHandler(getContentResolver()) {
             @Override
@@ -46,10 +49,13 @@ public class DetailActivity extends AppCompatActivity {
                 cursor.moveToFirst();
                 detailNick.setText(cursor.getString(cursor.getColumnIndex(Provider.Score.NICK)));
                 detailPoints.setText(cursor.getInt(cursor.getColumnIndex(Provider.Score.POINTS)) + " points");
-                if (cursor.getInt(cursor.getColumnIndex(Provider.Score.WINNER)) == 0)
+                if (cursor.getInt(cursor.getColumnIndex(Provider.Score.WINNER)) == 0) {
                     detailWinner.setText("Loser");
-                else
+                    shipImageView.setImageResource(R.drawable.ship_wreck_image);
+                } else {
                     detailWinner.setText("Winner");
+                    shipImageView.setImageResource(R.drawable.ship_image);
+                }
 
                 long time = cursor.getLong(cursor.getColumnIndex(Provider.Score.TIME)) * 1000L;
                 Calendar cal = Calendar.getInstance();

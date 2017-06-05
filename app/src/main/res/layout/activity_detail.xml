@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/holo_blue_light"
     tools:context="sk.upjs.ics.android.battleships.DetailActivity">
 
     <LinearLayout
@@ -17,6 +18,9 @@
 
         <TextView
             android:id="@+id/detailNick"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -24,6 +28,9 @@
 
         <TextView
             android:id="@+id/detailPoints"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
@@ -32,31 +39,47 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp">
 
         <TextView
             android:id="@+id/detailWinner"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left" />
+            android:layout_gravity="left"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/detailTime"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/detailDifficulty"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left" />
+            android:layout_gravity="left"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/detailShotsNumber"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"/>
+
+        <ImageView
+            android:id="@+id/shipImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
     </LinearLayout>
 
 

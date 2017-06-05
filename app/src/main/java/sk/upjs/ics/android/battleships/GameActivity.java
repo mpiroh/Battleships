@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
     private Queue<int[]> toShoot = new LinkedList<>();
     private int[] point = new int[2];
     private int playerCellsRemaining = 18; // number of players' ship cells remaining
-    private int botCellsRemaining = 1; // number of bots' ship cells remaining
+    private int botCellsRemaining = 18; // number of bots' ship cells remaining
     private MediaPlayer waterMediaPlayer;
     private MediaPlayer gunMediaPlayer;
     private int playerPoints = 0;
