@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="nickEditText"
+        android:title="Nick"
+        android:summary="Enter your nick"/>
+
+    <ListPreference
+        android:key="difficultyList"
+        android:defaultValue="normal"
+        android:entries="@array/difficulties"
+        android:entryValues="@array/difficultyValues"
+        android:title="Difficulty"
+        android:summary="Choose a game difficulty"/>
+
+    <ListPreference
+        android:key="colorList"
+        android:defaultValue="#ffffff"
+        android:entries="@array/colors"
+        android:entryValues="@array/colorValues"
+        android:title="Background"
+        android:summary="Choose a game background color"/>
+
+    <ListPreference
+        android:key="speedList"
+        android:defaultValue="1750"
+        android:entries="@array/speeds"
+        android:entryValues="@array/speedValues"
+        android:title="Animation speed"
+        android:summary="Choose a computer's animation speed"/>
+</PreferenceScreen>

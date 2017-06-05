@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="sk.upjs.ics.android.battleships">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".GameActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/SettingsActivityTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sk.upjs.ics.android.battleships.MainActivity" />
+        </activity>
+        <activity android:name=".ArrangeActivity" />
+        <activity android:name=".ScoreActivity" />
+
+        <provider
+            android:name=".provider.ScoreContentProvider"
+            android:authorities="sk.upjs.ics.android.battleships.provider.ScoreContentProvider"
+            android:enabled="true"
+            android:exported="false"></provider>
+
+        <activity android:name=".DetailActivity"></activity>
+    </application>
+
+</manifest>

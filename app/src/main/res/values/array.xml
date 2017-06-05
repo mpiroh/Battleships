@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colors">
+        <item name="white">White</item>
+        <item name="red">Red</item>
+        <item name="blue">Blue</item>
+        <item name="gray">Gray</item>
+    </string-array>
+    <string-array name="colorValues">
+        <item name="white">#ffffff</item>
+        <item name="red">#ef615c</item>
+        <item name="blue">#3968ea</item>
+        <item name="gray">#C0C0C0</item>
+    </string-array>
+
+    <string-array name="difficulties">
+        <item name="easy">Easy</item>
+        <item name="normal">Normal</item>
+        <item name="hard">Hard</item>
+    </string-array>
+    <string-array name="difficultyValues">
+        <item name="easy">easy</item>
+        <item name="normal">normal</item>
+        <item name="hard">hard</item>
+    </string-array>
+
+    <string-array name="speeds">
+        <item name="slow">Slow</item>
+        <item name="average">Average</item>
+        <item name="fast">Fast</item>
+    </string-array>
+    <string-array name="speedValues">
+        <item name="2500">2500</item>
+        <item name="1750">1750</item>
+        <item name="1000">1000</item>
+    </string-array>
+</resources>
