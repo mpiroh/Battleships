@@ -12,6 +12,22 @@
     android:gravity="center"
     android:background="@android:color/holo_blue_light">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="40dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:paddingTop="10dp"
+        android:shadowDx="5.0"
+        android:shadowDy="5.0"
+        android:shadowColor="@android:color/darker_gray"
+        android:shadowRadius="5.0"
+        android:maxLines="1"
+        android:text="BATTLESHIPS"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

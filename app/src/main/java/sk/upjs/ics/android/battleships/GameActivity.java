@@ -51,6 +51,8 @@ public class GameActivity extends AppCompatActivity {
     private int playerPoints = 0;
     private String nick;
     private int shotsNumber = 0;
+    private boolean soundsOn;
+    private boolean isReleased = false;
 
     public enum GameObject {
         Empty, Miss, Ship, CrashedShip
@@ -65,14 +67,27 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        waterMediaPlayer = MediaPlayer.create(this, R.raw.watersplash);
-        gunMediaPlayer = MediaPlayer.create(this, R.raw.gunhit);
-
         loadDrawables();
         applySettings();
         loadArrangedShips();
         designBoard();
         initGame();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isReleased = false;
+        waterMediaPlayer = MediaPlayer.create(this, R.raw.watersplash);
+        gunMediaPlayer = MediaPlayer.create(this, R.raw.gunhit);
+    }
+
+    @Override
+    protected void onPause() {
+        isReleased = true;
+        waterMediaPlayer.release();
+        gunMediaPlayer.release();
+        super.onPause();
     }
 
     private void loadDrawables() {
@@ -97,6 +112,7 @@ public class GameActivity extends AppCompatActivity {
             for (int j = 0; j < maxN; j++) {
                 imageViews[i][j] = new ImageView(this);
                 imageViews[i][j].setBackground(backgroundDrawable);
+                imageViews[i][j].setSoundEffectsEnabled(false);
 
                 final int x = i;
                 final int y = j;
@@ -108,11 +124,13 @@ public class GameActivity extends AppCompatActivity {
                             if (boardBot[x][y] == GameObject.Empty) {
                                 boardBot[x][y] = GameObject.Miss;
                                 imageViews[x][y].setImageDrawable(drawables[1]);
-                                waterMediaPlayer.start();
+                                if (soundsOn && !isReleased)
+                                    waterMediaPlayer.start();
                             } else if (boardBot[x][y] == GameObject.Ship) {
                                 boardBot[x][y] = GameObject.CrashedShip;
                                 imageViews[x][y].setImageDrawable(drawables[3]);
-                                gunMediaPlayer.start();
+                                if (soundsOn && !isReleased)
+                                    gunMediaPlayer.start();
                                 addPoints();
                                 botCellsRemaining--;
 
@@ -151,11 +169,13 @@ public class GameActivity extends AppCompatActivity {
                                             if (boardPlayer[xShot][yShot] == GameObject.Empty) {
                                                 boardPlayer[xShot][yShot] = GameObject.Miss;
                                                 imageViews[xShot][yShot].setImageDrawable(drawables[1]);
-                                                waterMediaPlayer.start();
+                                                if (soundsOn && !isReleased)
+                                                    waterMediaPlayer.start();
                                             } else if (boardPlayer[xShot][yShot] == GameObject.Ship) {
                                                 boardPlayer[xShot][yShot] = GameObject.CrashedShip;
                                                 imageViews[xShot][yShot].setImageDrawable(drawables[3]);
-                                                gunMediaPlayer.start();
+                                                if (soundsOn && !isReleased)
+                                                    gunMediaPlayer.start();
                                                 playerCellsRemaining--;
 
                                                 if (playerCellsRemaining == 0) {
@@ -167,7 +187,7 @@ public class GameActivity extends AppCompatActivity {
                                     });
                                 }
                             };
-                            timer.schedule(timerTask, speed * 2);
+                            timer.schedule(timerTask, speed * 2 + 500);
 
                             timerTask = new TimerTask() {
                                 @Override
@@ -190,7 +210,7 @@ public class GameActivity extends AppCompatActivity {
                                     myTurn = true;
                                 }
                             };
-                            timer.schedule(timerTask, speed * 3);
+                            timer.schedule(timerTask, speed * 3 + 500);
                         }
                     }
                 });
@@ -203,7 +223,7 @@ public class GameActivity extends AppCompatActivity {
     // sets difficulty, speed and background color
     public void applySettings() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        switch (sp.getString("difficultyList", "")) {
+        switch (sp.getString("difficultyList", "normal")) {
             case "easy":
                 difficulty = Difficulty.Easy;
                 break;
@@ -214,13 +234,15 @@ public class GameActivity extends AppCompatActivity {
                 difficulty = Difficulty.Hard;
         }
 
-        speed = Integer.parseInt(sp.getString("speedList", ""));
+        speed = Integer.parseInt(sp.getString("speedList", "1750"));
 
         LinearLayout activityLayout = (LinearLayout) findViewById(R.id.activityGameLayout);
-        int bgColor = Color.parseColor(sp.getString("colorList", "0"));
+        int bgColor = Color.parseColor(sp.getString("colorList", "#ffffff"));
         activityLayout.setBackgroundColor(bgColor);
 
-        nick = sp.getString("nickEditText", "");
+        nick = sp.getString("nickEditText", "Player A");
+
+        soundsOn = sp.getBoolean("soundsSwitch", true);
     }
 
     public void initGame() {
@@ -252,11 +274,13 @@ public class GameActivity extends AppCompatActivity {
                             if (boardPlayer[xShot][yShot] == GameObject.Empty) {
                                 boardPlayer[xShot][yShot] = GameObject.Miss;
                                 imageViews[xShot][yShot].setImageDrawable(drawables[1]);
-                                waterMediaPlayer.start();
+                                if (soundsOn && !isReleased)
+                                    waterMediaPlayer.start();
                             } else if (boardPlayer[xShot][yShot] == GameObject.Ship) {
                                 boardPlayer[xShot][yShot] = GameObject.CrashedShip;
                                 imageViews[xShot][yShot].setImageDrawable(drawables[3]);
-                                gunMediaPlayer.start();
+                                if (soundsOn && !isReleased)
+                                    gunMediaPlayer.start();
                                 playerCellsRemaining--;
                             }
                         }
@@ -613,6 +637,16 @@ public class GameActivity extends AppCompatActivity {
             playerPoints += Math.round(600 / 18);
         } else {
             playerPoints += Math.round(900 / 18);
+        }
+    }
+
+    public void subtractPoints() {
+        if (difficulty == Difficulty.Easy) {
+            playerPoints -= Math.round(300 / 18 / 2);
+        } else if (difficulty == Difficulty.Normal) {
+            playerPoints -= Math.round(600 / 18 / 2);
+        } else {
+            playerPoints -= Math.round(900 / 18 / 2);
         }
     }
 }

@@ -3,6 +3,7 @@
     <EditTextPreference
         android:key="nickEditText"
         android:title="Nick"
+        android:defaultValue="Player A"
         android:summary="Enter your nick"/>
 
     <ListPreference
@@ -11,7 +12,7 @@
         android:entries="@array/difficulties"
         android:entryValues="@array/difficultyValues"
         android:title="Difficulty"
-        android:summary="Choose a game difficulty"/>
+        android:summary="Choose game difficulty"/>
 
     <ListPreference
         android:key="colorList"
@@ -27,5 +28,11 @@
         android:entries="@array/speeds"
         android:entryValues="@array/speedValues"
         android:title="Animation speed"
-        android:summary="Choose a computer's animation speed"/>
+        android:summary="Choose computer's animation speed"/>
+
+    <SwitchPreference
+        android:key="soundsSwitch"
+        android:defaultValue="true"
+        android:title="Sounds"
+        android:summary="Turn on/off sounds"/>
 </PreferenceScreen>

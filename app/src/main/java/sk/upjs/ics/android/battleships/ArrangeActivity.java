@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,9 +59,18 @@ public class ArrangeActivity extends AppCompatActivity {
     public void setBackgroundColor() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         LinearLayout activityLayout = (LinearLayout) findViewById(R.id.activityArrangeLayout);
-        int bgColor = Color.parseColor(sp.getString("colorList", "0"));
+        String colorString = sp.getString("colorList", "#ffffff");
+        Log.d("COLORA", colorString);
+        int bgColor = Color.parseColor(colorString);
         activityLayout.setBackgroundColor(bgColor);
-        shipButton.setBackgroundColor(bgColor - 10);
+        if (colorString.equals("#ffffff"))
+            shipButton.setBackgroundColor(Color.parseColor("#C0C0C0"));
+        else if (colorString.equals("#ef615c"))
+            shipButton.setBackgroundColor(Color.parseColor("#ff2e2e"));
+        else if (colorString.equals("#3968ea"))
+            shipButton.setBackgroundColor(Color.parseColor("#00008B"));
+        else if (colorString.equals("#C0C0C0"))
+            shipButton.setBackgroundColor(Color.parseColor("#4c4c4c"));
     }
 
     @SuppressLint("NewApi")
@@ -78,6 +88,7 @@ public class ArrangeActivity extends AppCompatActivity {
                 imageViews[i][j] = new ImageView(this);
                 imageViews[i][j].setBackground(backgroundDrawable);
                 imageViews[i][j].setImageDrawable(drawables[0]);
+                imageViews[i][j].setSoundEffectsEnabled(false);
                 boardPlayer[i][j] = GameObject.Empty;
                 boardBot[i][j] = GameObject.Empty;
 
