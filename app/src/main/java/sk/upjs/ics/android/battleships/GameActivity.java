@@ -48,7 +48,7 @@ public class GameActivity extends AppCompatActivity {
     private Queue<int[]> toShoot = new LinkedList<>();
     private int[] point = new int[2];
     private int playerCellsRemaining = 18; // number of players' ship cells remaining
-    private int botCellsRemaining = 18; // number of bots' ship cells remaining
+    private int botCellsRemaining = 1; // number of bots' ship cells remaining
     private MediaPlayer waterMediaPlayer;
     private MediaPlayer gunMediaPlayer;
     private int playerPoints = 0;
@@ -110,7 +110,18 @@ public class GameActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        /*alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 600000, pIntent);*/ // = 10 minut
         alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, pIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (alarmManager != null) {
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            alarmManager.cancel(pIntent);
+        }
     }
 
     private void loadDrawables() {
@@ -163,6 +174,7 @@ public class GameActivity extends AppCompatActivity {
                                     return;
                                 }
                             }
+                            myTurn = false;
                             shotsNumber++;
 
                             final Timer timer = new Timer();

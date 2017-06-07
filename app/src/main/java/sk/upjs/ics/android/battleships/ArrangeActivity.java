@@ -73,7 +73,7 @@ public class ArrangeActivity extends AppCompatActivity {
         else if (colorString.equals("#ef615c"))
             shipButton.setBackgroundColor(Color.parseColor("#ff2e2e"));
         else if (colorString.equals("#3968ea"))
-            shipButton.setBackgroundColor(Color.parseColor("#00008B"));
+            shipButton.setBackgroundColor(Color.parseColor("#3232ff"));
         else if (colorString.equals("#C0C0C0"))
             shipButton.setBackgroundColor(Color.parseColor("#4c4c4c"));
     }

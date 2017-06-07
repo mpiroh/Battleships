@@ -29,3 +29,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+
+
+
+
+
+/*
+https://stackoverflow.com/questions/12507665/android-set-notification-after-3-hours
+https://www.youtube.com/watch?v=EnG5ZIVfki8
+https://stackoverflow.com/questions/12358485/android-open-activity-without-save-into-the-stack
+https://stackoverflow.com/questions/4047683/android-how-to-resume-an-app-from-a-notification
+https://www.youtube.com/watch?v=tFilQ48HR08&list=PLiWr-Oy5PNkXH5wQfBdX_gDnVW8xgykrB
+ */
