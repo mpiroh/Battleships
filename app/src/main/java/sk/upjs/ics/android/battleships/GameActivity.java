@@ -1,9 +1,12 @@
 package sk.upjs.ics.android.battleships;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -53,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
     private int shotsNumber = 0;
     private boolean soundsOn;
     private boolean isReleased = false;
+    private AlarmManager alarmManager;
 
     public enum GameObject {
         Empty, Miss, Ship, CrashedShip
@@ -88,6 +92,25 @@ public class GameActivity extends AppCompatActivity {
         waterMediaPlayer.release();
         gunMediaPlayer.release();
         super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (alarmManager != null) {
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            alarmManager.cancel(pIntent);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, pIntent);
     }
 
     private void loadDrawables() {
@@ -142,7 +165,7 @@ public class GameActivity extends AppCompatActivity {
                             }
                             shotsNumber++;
 
-                            Timer timer = new Timer();
+                            final Timer timer = new Timer();
                             TimerTask timerTask = new TimerTask() {
                                 @Override
                                 public void run() {
@@ -180,6 +203,7 @@ public class GameActivity extends AppCompatActivity {
 
                                                 if (playerCellsRemaining == 0) {
                                                     displayDialog(false);
+                                                    timer.cancel();
                                                     return;
                                                 }
                                             }
@@ -419,30 +443,30 @@ public class GameActivity extends AppCompatActivity {
                     toShoot.clear();
 
                     if (x - 1 >= 0 && boardPlayer[x - 1][y] == GameObject.CrashedShip) {
-                        if (x + 1 < maxN)
+                        if (x + 1 < maxN && (boardBot[x + 1][y] == GameObject.Empty || boardBot[x + 1][y] == GameObject.Ship))
                             toShoot.add(new int[]{x + 1, y});
                     } else if (x + 1 < maxN && boardPlayer[x + 1][y] == GameObject.CrashedShip) {
-                        if (x - 1 >= 0)
+                        if (x - 1 >= 0 && (boardBot[x - 1][y] == GameObject.Empty || boardBot[x - 1][y] == GameObject.Ship))
                             toShoot.add(new int[]{x - 1, y});
                     } else if (y - 1 >= 0 && boardPlayer[x][y - 1] == GameObject.CrashedShip) {
-                        if (y + 1 < maxN)
+                        if (y + 1 < maxN && (boardBot[x][y + 1] == GameObject.Empty || boardBot[x][y + 1] == GameObject.Ship))
                             toShoot.add(new int[]{x, y + 1});
                     } else if (y + 1 < maxN && boardPlayer[x][y + 1] == GameObject.CrashedShip) {
-                        if (y - 1 >= 0)
+                        if (y - 1 >= 0 && (boardBot[x][y - 1] == GameObject.Empty || boardBot[x][y - 1] == GameObject.Ship))
                             toShoot.add(new int[]{x, y - 1});
                     }
                 } else if (boardPlayer[x][y] == GameObject.Empty) {
                     if (point[0] - 1 >= 0 && boardPlayer[point[0] - 1][point[1]] == GameObject.CrashedShip) {
-                        if (point[0] + 1 < maxN)
+                        if (point[0] + 1 < maxN && (boardPlayer[point[0] + 1][point[1]] == GameObject.Empty || boardPlayer[point[0] + 1][point[1]] == GameObject.Ship))
                             toShoot.add(new int[]{point[0] + 1, point[1]});
                     } else if (point[0] + 1 < maxN && boardPlayer[point[0] + 1][1] == GameObject.CrashedShip) {
-                        if (point[0] - 1 >= 0)
+                        if (point[0] - 1 >= 0 && (boardPlayer[point[0] - 1][point[1]] == GameObject.Empty || boardPlayer[point[0] - 1][point[1]] == GameObject.Ship))
                             toShoot.add(new int[]{point[0] - 1, point[1]});
                     } else if (point[1] - 1 >= 0 && boardPlayer[point[0]][point[1] - 1] == GameObject.CrashedShip) {
-                        if (point[1] + 1 < maxN)
+                        if (point[1] + 1 < maxN && (boardPlayer[point[0]][point[1] + 1] == GameObject.Empty || boardPlayer[point[0]][point[1] + 1] == GameObject.Ship))
                             toShoot.add(new int[]{point[0], point[1] + 1});
                     } else if (point[1] + 1 < maxN && boardPlayer[point[0]][point[1] + 1] == GameObject.CrashedShip) {
-                        if (point[1] - 1 >= 0)
+                        if (point[1] - 1 >= 0 && (boardPlayer[point[0]][point[1] - 1] == GameObject.Empty || boardPlayer[point[0]][point[1] - 1] == GameObject.Ship))
                             toShoot.add(new int[]{point[0], point[1] - 1});
                     }
                 }
@@ -581,9 +605,15 @@ public class GameActivity extends AppCompatActivity {
                             }
                             Log.d("here", "3");
                             insertIntoContentProvider(nick, 1, System.currentTimeMillis() / 1000, diff, shotsNumber, playerPoints);
+                            finish();
                         }
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
                     .show();
         } else {
             new AlertDialog.Builder(GameActivity.this)
@@ -604,9 +634,15 @@ public class GameActivity extends AppCompatActivity {
                                     diff = "hard";
                             }
                             insertIntoContentProvider(nick, 0, System.currentTimeMillis() / 1000, diff, shotsNumber, playerPoints);
+                            finish();
                         }
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
                     .show();
         }
     }

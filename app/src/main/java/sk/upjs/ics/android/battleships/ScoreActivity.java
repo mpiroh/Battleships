@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import sk.upjs.ics.android.battleships.provider.ScoreContentProvider;
@@ -30,6 +31,9 @@ public class ScoreActivity extends AppCompatActivity implements LoaderManager.Lo
         getLoaderManager().initLoader(0, Bundle.EMPTY, this);
 
         ListView scoreListView = (ListView) findViewById(R.id.scoreListView);
+        ViewGroup header = (ViewGroup) getLayoutInflater().inflate(R.layout.score_header, scoreListView, false);
+        scoreListView.addHeaderView(header);
+
         adapter = new ScoreCursorAdapter(this, null);
         scoreListView.setAdapter(adapter);
 
